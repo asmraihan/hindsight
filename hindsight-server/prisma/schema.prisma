@@ -10,11 +10,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
 model Issue {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
-  status      String  @default("OPEN")
+  status      String   @default("OPEN")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model activity {
+  id   String   @id @default(auto()) @map("_id") @db.ObjectId
+  type String
+  user String
+  des  String
+  date DateTime @default(now())
 }
